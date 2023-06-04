@@ -774,7 +774,7 @@ if __name__ == "__main__":
             publications = list()
             for publication in publication_list:
                 publications.append(publication.json_representation())
-            publications_data = json.dumps(publications)
+            publications_data = json.dumps({"data": publications})
             file.write(publications_data)
 
     validate_generated_publications(PUBLICATION_COUNT, publication_list)
@@ -794,7 +794,7 @@ if __name__ == "__main__":
             subscriptions = list()
             for subscription in subscription_list:
                 subscriptions.append(subscription.json_representation())
-            subscriptions_data = json.dumps(subscriptions)
+            subscriptions_data = json.dumps({ "data": subscriptions})
             file.write(subscriptions_data)
     validate_generated_subscriptions(SUBSCRIPTION_COUNT, subscription_list)
 

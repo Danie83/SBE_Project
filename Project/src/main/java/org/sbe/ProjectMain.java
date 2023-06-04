@@ -1,14 +1,20 @@
 package org.sbe;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Logger;
 
 public class ProjectMain
@@ -82,6 +88,53 @@ public class ProjectMain
             {
                 LOGGER.severe("Error running python script.");
             }
+        }
+        else
+        {
+            LOGGER.info("Publication generation is disabled.");
+        }
+
+        try
+        {
+            // Read the publication and subscription data and create JSONObjects for each one.
+            String publicationsPath = Paths.get(ProjectMain.class.getResource("/publications.json").toURI()).toString();
+            String subscriptionsPath = Paths.get(ProjectMain.class.getResource("/subscriptions.json").toURI()).toString();
+            String publicationsContent = new String(Files.readAllBytes(Paths.get(publicationsPath)));
+            String subscriptionsContent = new String(Files.readAllBytes(Paths.get(subscriptionsPath)));
+
+            JSONObject publicationsJson = new JSONObject(publicationsContent);
+            JSONObject subscriptionJson = new JSONObject(subscriptionsContent);
+
+            JSONArray publicationsArray = publicationsJson.getJSONArray("data");
+            for (int i = 0; i < publicationsArray.length(); i++)
+            {
+                JSONObject dataObject = publicationsArray.getJSONObject(i);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                try
+                {
+                    Date date = dateFormat.parse(dataObject.getString("date"));
+                }
+                catch (ParseException ex)
+                {
+                    LOGGER.severe("Invalid date format in publication data.");
+                    continue;
+                }
+                float rain = dataObject.getFloat("rain");
+                int temp = dataObject.getInt("temp");
+                String city = dataObject.getString("city");
+                int stationID = dataObject.getInt("station_id");
+                int wind = dataObject.getInt("wind");
+                String direction = dataObject.getString("direction");
+            }
+        }
+        catch (URISyntaxException e)
+        {
+            LOGGER.severe("Invalid URI paths for publication and subscription files.");
+        }
+        catch (IOException ex)
+        {
+            LOGGER.severe("Publication and subscription files not found.");
         }
     }
 
