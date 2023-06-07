@@ -1,23 +1,28 @@
 package org.sbe.data;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataManager
 {
+    private static DataManager instance = null;
     private List<Publication> publications;
     private List<Subscription> subscriptions;
 
-    public DataManager()
+    private DataManager()
     {
         this.publications = new ArrayList<>();
         this.subscriptions = new ArrayList<>();
     }
 
-    public DataManager(List<Publication> publications, List<Subscription> subscriptions)
+    public static DataManager getInstance()
     {
-        this.setPublications(publications);
-        this.setSubscriptions(subscriptions);
+        if (instance == null)
+        {
+            instance = new DataManager();
+        }
+        return instance;
     }
 
     public List<Publication> getPublications()
