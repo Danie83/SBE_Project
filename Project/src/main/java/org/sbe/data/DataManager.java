@@ -194,7 +194,6 @@ public class DataManager
                 for (int j = 0; j < dataObjectArray.length(); j++)
                 {
                     JSONObject constraintObject = dataObjectArray.getJSONObject(j);
-                    System.out.println(constraintObject.toString());
                     String factor = constraintObject.getString("factor");
                     String operator = constraintObject.getString("operator");
                     String requiredValue = constraintObject.getString("required_value");
