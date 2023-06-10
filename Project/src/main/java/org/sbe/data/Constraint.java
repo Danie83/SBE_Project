@@ -72,7 +72,7 @@ public class Constraint
             case "<=":
                 return !compareGreater(value, requiredValue);
             default:
-                break;
+                return false;
         }
     }
 

@@ -302,7 +302,7 @@ class Subscription:
             tmp = dict()
             tmp["factor"] = constraint.factor
             tmp["operator"] = constraint.operator
-            tmp["required_value"] = constraint.required_value
+            tmp["required_value"] = str(constraint.required_value)
             representation.append(tmp)
         return representation
 
