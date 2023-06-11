@@ -3,6 +3,12 @@
 
 package org.sbe;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayOutputStream;
+import com.google.protobuf.CodedOutputStream;
+import com.google.protobuf.GeneratedMessageV3;
+import java.io.IOException;
+
 public final class ProtoClass {
   private ProtoClass() {}
   public static void registerAllExtensions(
@@ -90,7 +96,7 @@ public final class ProtoClass {
     private Publication(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private Publication() {
+    public Publication() {
       city_ = "";
       direction_ = "";
       date_ = "";
@@ -105,13 +111,13 @@ public final class ProtoClass {
 
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.sbe.ProtoClass.internal_static_tutorial_Publication_descriptor;
+      return internal_static_tutorial_Publication_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.sbe.ProtoClass.internal_static_tutorial_Publication_fieldAccessorTable
+      return internal_static_tutorial_Publication_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.sbe.ProtoClass.Publication.class, org.sbe.ProtoClass.Publication.Builder.class);
     }
@@ -288,29 +294,31 @@ public final class ProtoClass {
       return true;
     }
 
-    @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
+    public void writeTo(ByteArrayOutputStream output)
                         throws java.io.IOException {
+
+      CodedOutputStream codedOutput = CodedOutputStream.newInstance(output);
+
       if (stationId_ != 0) {
-        output.writeInt32(1, stationId_);
+        codedOutput.writeInt32(1, stationId_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(city_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, city_);
+        com.google.protobuf.GeneratedMessageV3.writeString(CodedOutputStream.newInstance(output), 2, city_);
       }
       if (temp_ != 0) {
-        output.writeInt32(3, temp_);
+        codedOutput.writeInt32(3, temp_);
       }
       if (java.lang.Float.floatToRawIntBits(rain_) != 0) {
-        output.writeFloat(4, rain_);
+        codedOutput.writeFloat(4, rain_);
       }
       if (wind_ != 0) {
-        output.writeInt32(5, wind_);
+        codedOutput.writeInt32(5, wind_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(direction_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, direction_);
+        com.google.protobuf.GeneratedMessageV3.writeString(CodedOutputStream.newInstance(output), 6, direction_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(date_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, date_);
+        com.google.protobuf.GeneratedMessageV3.writeString(CodedOutputStream.newInstance(output), 7, date_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -508,13 +516,13 @@ public final class ProtoClass {
         org.sbe.ProtoClass.PublicationOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return org.sbe.ProtoClass.internal_static_tutorial_Publication_descriptor;
+        return internal_static_tutorial_Publication_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return org.sbe.ProtoClass.internal_static_tutorial_Publication_fieldAccessorTable
+        return internal_static_tutorial_Publication_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 org.sbe.ProtoClass.Publication.class, org.sbe.ProtoClass.Publication.Builder.class);
       }
@@ -546,12 +554,12 @@ public final class ProtoClass {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.sbe.ProtoClass.internal_static_tutorial_Publication_descriptor;
+        return internal_static_tutorial_Publication_descriptor;
       }
 
       @java.lang.Override
       public org.sbe.ProtoClass.Publication getDefaultInstanceForType() {
-        return org.sbe.ProtoClass.Publication.getDefaultInstance();
+        return getDefaultInstance();
       }
 
       @java.lang.Override
@@ -639,7 +647,7 @@ public final class ProtoClass {
       }
 
       public Builder mergeFrom(org.sbe.ProtoClass.Publication other) {
-        if (other == org.sbe.ProtoClass.Publication.getDefaultInstance()) return this;
+        if (other == getDefaultInstance()) return this;
         if (other.getStationId() != 0) {
           setStationId(other.getStationId());
         }
