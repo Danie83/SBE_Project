@@ -20,7 +20,7 @@ public class ConfigReader
     private static ConfigReader instance = null;
 
     /** The properties that are read from the configuration properties. */
-    private Properties properties;
+    private final Properties properties;
 
     /**
      * Private constructor to prevent instantiation from outside the class.

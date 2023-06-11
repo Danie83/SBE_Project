@@ -20,7 +20,7 @@ extends BaseRichBolt
     private OutputCollector collector;
     private List<Subscription> subscriptions;
 
-    public void prepare(Map<String, Object> conf,
+    public void prepare(Map conf,
                         TopologyContext context,
                         OutputCollector collector)
     {

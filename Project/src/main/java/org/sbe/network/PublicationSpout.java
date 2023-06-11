@@ -19,7 +19,7 @@ extends BaseRichSpout
     private List<Publication> publications;
     private int index;
 
-    public void open(Map<String, Object> conf,
+    public void open(Map conf,
                      TopologyContext context,
                      SpoutOutputCollector collector)
     {
