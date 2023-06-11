@@ -1,6 +1,9 @@
 package org.sbe.network;
 
 import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
+import org.apache.storm.generated.StormTopology;
+import org.apache.storm.thrift.TException;
 import org.apache.storm.topology.TopologyBuilder;
 
 public class BrokerTopology
@@ -18,6 +21,24 @@ public class BrokerTopology
         config.put(Config.TOPOLOGY_TRANSFER_BATCH_SIZE, 1);
         config.setNumWorkers(3);
 
-        // TODO: run topology in local mode
+        LocalCluster cluster = new LocalCluster;
+        StormTopology topology = builder.createTopology();
+
+        try
+        {
+            cluster.submitTopology("project-topology", config, topology);
+            Thread.sleep(20000);
+            cluster.killTopology("project-topology");
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
+        cluster.shutdown();
     }
 }
