@@ -49,13 +49,29 @@ public class Constraint
         this.requiredValue = requiredValue;
     }
 
-    private boolean evaluateConstraint(Publication publication)
-    throws NoSuchFieldException, IllegalAccessException
+    public boolean evaluateConstraint(Publication publication)
     {
-        Class<?> targetPublicationClass = publication.getClass();
-        Field field = targetPublicationClass.getDeclaredField(factor);
-        field.setAccessible(true);
-        Object value = field.get(publication);
+        Object value = null;
+        try
+        {
+            Class<?> targetPublicationClass = publication.getClass();
+            Field field = targetPublicationClass.getDeclaredField(factor);
+            field.setAccessible(true);
+            value = field.get(publication);
+        }
+        catch (NoSuchFieldException e)
+        {
+            return false;
+        }
+        catch (IllegalAccessException e)
+        {
+            return false;
+        }
+
+        if (value == null)
+        {
+            return false;
+        }
 
         switch (operator)
         {

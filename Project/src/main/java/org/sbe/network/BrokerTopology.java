@@ -11,7 +11,7 @@ public class BrokerTopology
     {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("publication-spout", new PublicationSpout());
-        builder.setBolt("subscription-filter-bolt", new SubscriptionFilterBolt())
+        builder.setBolt("subscription-filter-bolt", new BrokerBolt())
                .shuffleGrouping("publication-spout");
 
         Config config = new Config();
