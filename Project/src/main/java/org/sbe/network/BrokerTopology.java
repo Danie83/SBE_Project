@@ -4,15 +4,26 @@ import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.utils.Utils;
 
 public class BrokerTopology
 {
     public static void execute()
     {
         TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout("publication-spout", new PublicationSpout());
-        builder.setBolt("subscription-filter-bolt", new BrokerBolt())
-               .shuffleGrouping("publication-spout");
+
+        PublisherSpout spout = new PublisherSpout();
+        String spoutId = "publisherSpout";
+        int spoutParallelism = 1;
+
+        BrokerBolt brokerBolt = new BrokerBolt();
+        String brokerBoltId = "brokerBolt";
+        int brokerBoltParallelism = 1;
+
+        builder.setSpout(spoutId, spout, spoutParallelism);
+        builder.setBolt(brokerBoltId, brokerBolt, brokerBoltParallelism)
+                .setNumTasks(brokerBoltParallelism)
+               .shuffleGrouping(spoutId);
 
         Config config = new Config();
         config.setDebug(true);
@@ -21,16 +32,9 @@ public class BrokerTopology
 
         LocalCluster cluster = new LocalCluster();
         StormTopology topology = builder.createTopology();
-        cluster.submitTopology("project-topology", config, topology);
+        cluster.submitTopology("publish-subscribe-topology", config, topology);
 
-        try
-        {
-            Thread.sleep(20000);
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+        Utils.sleep(20000);
 
         cluster.killTopology("project-topology");
         cluster.shutdown();

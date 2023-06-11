@@ -12,7 +12,7 @@ import org.sbe.data.Publication;
 import java.util.List;
 import java.util.Map;
 
-public class PublicationSpout
+public class PublisherSpout
 extends BaseRichSpout
 {
     private SpoutOutputCollector collector;
