@@ -14,11 +14,11 @@ public class BrokerTopology
 
         PublisherSpout spout = new PublisherSpout();
         String spoutId = "publisherSpout";
-        int spoutParallelism = 1;
+        int spoutParallelism = 3;
 
         BrokerBolt brokerBolt = new BrokerBolt();
         String brokerBoltId = "brokerBolt";
-        int brokerBoltParallelism = 1;
+        int brokerBoltParallelism = 3;
 
         builder.setSpout(spoutId, spout, spoutParallelism);
         builder.setBolt(brokerBoltId, brokerBolt, brokerBoltParallelism)

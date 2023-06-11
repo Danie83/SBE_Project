@@ -1,0 +1,17 @@
+syntax = "proto3";
+package tutorial;
+
+option java_package = "org.sbe";
+option java_outer_classname = "ProtoClass";
+
+option csharp_namespace = "Google.Protobuf.Examples.ProtoClassExample";
+
+message Publication {
+  int32 stationId = 1;
+  string city = 2;
+  int32 temp = 3;
+  float rain = 4;
+  int32 wind = 5;
+  string direction = 6;
+  string date = 7;
+}

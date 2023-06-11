@@ -58,7 +58,7 @@ extends BaseRichSpout
         this.collector.emit(new Values(emmitedSerializedPublication));
         index++;
 
-        if (index > publications.size())
+        if (index >= publications.size())
         {
             index = 0;
         }
