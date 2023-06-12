@@ -47,7 +47,7 @@ public class BrokerTopology
 //                .shuffleGrouping(spoutId);
 
         Config config = new Config();
-        config.setDebug(true);
+//        config.setDebug(true);
         config.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 1024);
         config.setNumWorkers(3);
 
@@ -55,11 +55,9 @@ public class BrokerTopology
         StormTopology topology = builder.createTopology();
         cluster.submitTopology("publish-subscribe-topology", config, topology);
 
-        Utils.sleep(1000);
-
+//        Utils.sleep(180000);
+        Utils.sleep(30000);
         cluster.killTopology("publish-subscribe-topology");
         cluster.shutdown();
-        
-        System.out.print(Statistics.getDeliveryTime());
     }
 }

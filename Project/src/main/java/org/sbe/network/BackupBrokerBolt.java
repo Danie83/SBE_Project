@@ -36,7 +36,7 @@ public class BackupBrokerBolt extends BaseRichBolt
     public void execute(Tuple input)
     {
         String sourceComponent = input.getSourceComponent();
-        if (sourceComponent.equals("publisher"))
+        if (sourceComponent.equals("publisherSpout"))
         {
             Publication publication = (Publication) input.getValueByField("publication");
             publications.add(publication);

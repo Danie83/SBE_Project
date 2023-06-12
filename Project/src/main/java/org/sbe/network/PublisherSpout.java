@@ -10,6 +10,7 @@ import org.apache.storm.tuple.Values;
 import org.sbe.ProtoClass;
 import org.sbe.data.DataManager;
 import org.sbe.data.Publication;
+import org.sbe.statistics.Statistics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,7 +39,7 @@ extends BaseRichSpout
         Publication publication = publications.get(index);
         long startTime = System.currentTimeMillis();
         Statistics.addStartTimestamp(publication, startTime);
-        
+        System.out.println(publication.getDate().toString());
         ProtoClass.Publication.Builder serializedPublication = new ProtoClass.Publication().newBuilder()
                 .setCity(publication.getCity())
                 .setDate(publication.getDate().toString())
@@ -60,7 +61,7 @@ extends BaseRichSpout
         }
 
         byte[] emmitedSerializedPublication = outputStream.toByteArray();
-        
+
         this.collector.emit(new Values(emmitedSerializedPublication));
         index++;
 

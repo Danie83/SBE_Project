@@ -43,7 +43,7 @@ extends BaseRichBolt
     public void execute(Tuple input)
     {
         String sourceComponent = input.getSourceComponent();
-        if (sourceComponent.equals("publisher")) {
+        if (sourceComponent.equals("publisherSpout")) {
             byte[] serializedPublication = input.getBinaryByField("publication");
             ProtoClass.Publication deserializedPublication = null;
             try {
@@ -91,6 +91,7 @@ extends BaseRichBolt
             if (canEmit)
             {
                 Statistics.updateEndTimestamp(publication, System.currentTimeMillis());
+                System.out.println("emmitting from brokerbolt");
                 collector.emit(new Values(subscription, publication));
             }
         }

@@ -4,16 +4,14 @@ import org.sbe.data.Publication;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.OptionalDouble;
 
 public class Statistics
 {
     private static Map<Publication, Timestamp> deliveryTime;
     private static boolean initialized = false;
     
-    public static Map<Publication, Timestamp> getDeliveryTime(){
-        return deliveryTime;
-    }
-    
+
     public static void initialize()
     {
         if (initialized)
@@ -40,6 +38,31 @@ public class Statistics
 
         ts.setEnd(end);
         deliveryTime.put(publication, ts);
+    }
+
+    public static long getSuccessfulPublications()
+    {
+        return deliveryTime.entrySet()
+                           .stream()
+                           .filter(e -> e.getValue().getEnd() != null)
+                           .count();
+    }
+
+    public static double getAveragePublications()
+    {
+        OptionalDouble average = deliveryTime.entrySet()
+                                             .stream()
+                                             .filter(e -> e.getValue().getEnd() != null)
+                                             .mapToDouble(e -> (e.getValue().getEnd() - e.getValue().getEnd()))
+                                             .average();
+        if (average.isPresent())
+        {
+            return average.getAsDouble();
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     private static class Timestamp
