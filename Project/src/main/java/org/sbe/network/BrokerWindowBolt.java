@@ -115,7 +115,6 @@ extends BaseWindowedBolt
                 collector.ack(tuple);
             }
         }
-
     }
 
     private Publication deserializePublication(byte[] serializedPublication)

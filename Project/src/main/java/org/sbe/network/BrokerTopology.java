@@ -23,6 +23,10 @@ public class BrokerTopology
         String brokerBoltId = "brokerBolt";
         int brokerBoltParallelism = 3;
 
+        BackupBrokerBolt backupBrokerBolt = new BackupBrokerBolt();
+        String backupBrokerBoltId = "backupBrokerBolt";
+        int backupBrokerBoltParallelism = 1;
+
 //        BrokerWindowBolt brokerWindowBolt = new BrokerWindowBolt();
 //        brokerWindowBolt.withWindow(new BaseWindowedBolt.Duration(10, TimeUnit.SECONDS));
 //        String brokerWindowBoltId = "brokerWindowBolt";
@@ -32,6 +36,10 @@ public class BrokerTopology
         builder.setBolt(brokerBoltId, brokerBolt, brokerBoltParallelism)
                .setNumTasks(brokerBoltParallelism)
                .shuffleGrouping(spoutId);
+
+        builder.setBolt(backupBrokerBoltId, backupBrokerBolt, backupBrokerBoltParallelism)
+                .setNumTasks(backupBrokerBoltParallelism)
+                .shuffleGrouping(brokerBoltId);
 
 //        builder.setBolt(brokerWindowBoltId, brokerWindowBolt, brokerWindowBoltParallelism)
 //                .setNumTasks(brokerWindowBoltParallelism)
