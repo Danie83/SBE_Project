@@ -36,6 +36,30 @@ extends BaseWindowedBolt
     @Override
     public void execute(TupleWindow inputWindow)
     {
+        float avgRain = (float) 0;
+        float avgTemp = (float) 0;
+        float avgWind = (float) 0;
+        for (Tuple tuple : inputWindow.get())
+        {
+            byte[] serializedPublication = tuple.getBinaryByField("publication");
+            Publication publication = deserializePublication(serializedPublication);
+            avgRain += publication.getRain();
+            avgTemp += publication.getTemp();
+            avgWind += publication.getWind();
+        }
+        if (avgRain != 0)
+        {
+            avgRain /= inputWindow.get().size();
+        }
+        if (avgTemp != 0)
+        {
+            avgTemp /= inputWindow.get().size();
+        }
+        if (avgWind != 0)
+        {
+            avgWind /= inputWindow.get().size();
+        }
+
         for (Tuple tuple : inputWindow.get())
         {
             byte[] serializedPublication = tuple.getBinaryByField("publication");
@@ -44,10 +68,45 @@ extends BaseWindowedBolt
             boolean canEmit = true;
             for (Constraint constraint : subscription.getConstraints())
             {
-                if (!constraint.evaluateConstraint(publication))
+                if (constraint.getAvg())
                 {
-                    canEmit = false;
-                    break;
+                    switch (constraint.getFactor())
+                    {
+                        case "rain":
+                            if (!constraint.evaluateAverage(avgRain))
+                            {
+                                canEmit = false;
+                            }
+                            break;
+                        case "wind":
+                            if (!constraint.evaluateAverage(avgWind))
+                            {
+                                canEmit = false;
+                            }
+                            break;
+                        case "temp":
+                            if(!constraint.evaluateAverage(avgTemp))
+                            {
+                                canEmit = false;
+                            }
+                            break;
+                        default:
+                            canEmit = false;
+                            break;
+                    }
+
+                    if (!canEmit)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    if (!constraint.evaluateConstraint(publication))
+                    {
+                        canEmit = false;
+                        break;
+                    }
                 }
             }
             if (canEmit)

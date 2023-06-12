@@ -7,6 +7,7 @@ from collections import deque
 import time
 import json
 import sys
+import random
 
 config_object = ConfigParser()
 config_object.read(sys.argv[1])
@@ -218,7 +219,7 @@ class PublicationGenerator:
         return publication_list
 
 class Constraint:
-    def __init__(self, factor, operator, required_value) -> None:
+    def __init__(self, factor, operator, required_value, avg) -> None:
         """Constructor for a Contraint.
 
         Args:
@@ -230,6 +231,7 @@ class Constraint:
         self.factor = factor
         self.operator = operator
         self.required_value = required_value
+        self.avg = avg
 
     def __str__(self) -> str:
         """String representation of a Constraint.
@@ -303,6 +305,7 @@ class Subscription:
             tmp["factor"] = constraint.factor
             tmp["operator"] = constraint.operator
             tmp["required_value"] = str(constraint.required_value)
+            tmp["avg"] = str(constraint.avg)
             representation.append(tmp)
         return representation
 
@@ -458,7 +461,8 @@ class SubscriptionGeneratorV2:
                         constraint = Constraint(
                             mfow[0],
                             mfow[2] if current_operator_count < operator_field_count else "!=",
-                            CITIES[np.random.randint(0, len(CITIES) - 1)]
+                            CITIES[np.random.randint(0, len(CITIES) - 1)],
+                            False
                         )
                         if constraint.operator == mfow[2]:
                             current_operator_count += 1
@@ -467,7 +471,8 @@ class SubscriptionGeneratorV2:
                         constraint = Constraint(
                             mfow[0],
                             mfow[2] if current_operator_count < operator_field_count else np.random.choice([x for x in VALID_OPERATIONS["stationId"] if x != mfow[2]]),
-                            STATIONS[np.random.randint(0, len(STATIONS) - 1)]
+                            STATIONS[np.random.randint(0, len(STATIONS) - 1)],
+                            False
                         )
                         if constraint.operator == mfow[2]:
                             current_operator_count += 1
@@ -476,7 +481,8 @@ class SubscriptionGeneratorV2:
                         constraint = Constraint(
                             mfow[0],
                             mfow[2] if current_operator_count < operator_field_count else "!=",
-                            DIRECTIONS[np.random.randint(0, len(DIRECTIONS) - 1)]
+                            DIRECTIONS[np.random.randint(0, len(DIRECTIONS) - 1)],
+                            False
                         )
                         if constraint.operator == mfow[2]:
                             current_operator_count += 1
@@ -485,7 +491,8 @@ class SubscriptionGeneratorV2:
                         constraint = Constraint(
                             mfow[0],
                             mfow[2] if current_operator_count < operator_field_count else "!=",
-                            DATES[np.random.randint(0, len(DATES) - 1)]
+                            DATES[np.random.randint(0, len(DATES) - 1)],
+                            False
                         )
                         if constraint.operator == mfow[2]:
                             current_operator_count += 1
@@ -494,7 +501,8 @@ class SubscriptionGeneratorV2:
                         constraint = Constraint(
                             mfow[0],
                             mfow[2] if current_operator_count < operator_field_count else np.random.choice([x for x in VALID_OPERATIONS["temp"] if x != mfow[2]]),
-                            np.random.randint(TEMP_LIMITS[0], TEMP_LIMITS[1])
+                            np.random.randint(TEMP_LIMITS[0], TEMP_LIMITS[1]),
+                            True if random.randint(0, 9) < 2 and mfow[0] != "==" and mfow[0] != "!=" else False
                         )
                         if constraint.operator == mfow[2]:
                             current_operator_count += 1
@@ -503,7 +511,8 @@ class SubscriptionGeneratorV2:
                         constraint = Constraint(
                             mfow[0],
                             mfow[2] if current_operator_count < operator_field_count else np.random.choice([x for x in VALID_OPERATIONS["wind"] if x != mfow[2]]),
-                            np.random.randint(WIND_LIMITS[0], WIND_LIMITS[1])
+                            np.random.randint(WIND_LIMITS[0], WIND_LIMITS[1]),
+                            True if random.randint(0, 9) < 2 and mfow[0] != "==" and mfow[0] != "!=" else False
                         )
                         if constraint.operator == mfow[2]:
                             current_operator_count += 1
@@ -512,7 +521,8 @@ class SubscriptionGeneratorV2:
                         constraint = Constraint(
                             mfow[0],
                             mfow[2] if current_operator_count < operator_field_count else np.random.choice([x for x in VALID_OPERATIONS["rain"] if x != mfow[2]]),
-                            round(np.random.uniform(RAIN_LIMITS[0], RAIN_LIMITS[1]), 1)
+                            round(np.random.uniform(RAIN_LIMITS[0], RAIN_LIMITS[1]), 1),
+                            True if random.randint(0, 9) < 2 and mfow[0] != "==" and mfow[0] != "!=" else False
                         )
                         if constraint.operator == mfow[2]:
                             current_operator_count += 1

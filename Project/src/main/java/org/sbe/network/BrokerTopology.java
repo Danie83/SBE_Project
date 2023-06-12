@@ -5,7 +5,6 @@ import org.apache.storm.LocalCluster;
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.topology.base.BaseWindowedBolt;
-import org.apache.storm.utils.Time;
 import org.apache.storm.utils.Utils;
 
 import java.util.concurrent.TimeUnit;

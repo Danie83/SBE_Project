@@ -115,7 +115,7 @@ public class DataManager
                     try
                     {
                         // We need to copy the generated publication and subscription files
-                        // from the the source folder to our resources folder.
+                        // from the source folder to our resources folder.
                         String sourceDirectoryPath = "target/classes/";
                         String destinationDirectoryPath = "src/main/resources";
 
@@ -197,8 +197,9 @@ public class DataManager
                     String factor = constraintObject.getString("factor");
                     String operator = constraintObject.getString("operator");
                     String requiredValue = constraintObject.getString("required_value");
+                    String avg = constraintObject.getString("avg");
 
-                    Constraint constraint = new Constraint(factor, operator, requiredValue);
+                    Constraint constraint = new Constraint(factor, operator, requiredValue, avg);
                     constraints.add(constraint);
                 }
 

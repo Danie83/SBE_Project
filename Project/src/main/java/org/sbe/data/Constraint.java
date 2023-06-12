@@ -6,19 +6,46 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Class that represents a subscription constraint.
+ */
 public class Constraint
 {
+    /** The publication field as a string that is part of the constraint. */
+
     private String factor;
+
+    /** The operator which is used to evaluate the constraint. */
     private String operator;
+
+    /** The required value that is evaluated against the publication field. */
     private String requiredValue;
 
-    public Constraint(String factor, String operator, String requiredValue)
+    private Boolean avg;
+
+    /**
+     * Basic constructor.
+     *
+     * @param   factor
+     *          The factor of the constraint.
+     * @param   operator
+     *          The operator of the constraint.
+     * @param   requiredValue
+     *          The required value of the constraint.
+     */
+    public Constraint(String factor, String operator, String requiredValue, String avg)
     {
         this.setFactor(factor);
         this.setOperator(operator);
         this.setRequiredValue(requiredValue);
+        this.setAvg(avg.equals("True"));
     }
 
+    /**
+     * Getter for the factor property.
+     *
+     * @return  The factor property.
+     */
     public String getFactor()
     {
         return factor;
@@ -87,6 +114,23 @@ public class Constraint
                 return compareGreater(value, requiredValue);
             case "<=":
                 return !compareGreater(value, requiredValue);
+            default:
+                return false;
+        }
+    }
+
+    public boolean evaluateAverage(float averageValue)
+    {
+        switch (operator)
+        {
+            case "<":
+                return Float.valueOf(requiredValue) < averageValue;
+            case ">=":
+                return Float.valueOf(requiredValue) >= averageValue;
+            case ">":
+                return Float.valueOf(requiredValue) > averageValue;
+            case "<=":
+                return Float.valueOf(requiredValue) <= averageValue;
             default:
                 return false;
         }
@@ -186,5 +230,13 @@ public class Constraint
             return requiredValue.equals(value);
         }
         return false;
+    }
+
+    public Boolean getAvg() {
+        return avg;
+    }
+
+    public void setAvg(Boolean avg) {
+        this.avg = avg;
     }
 }
