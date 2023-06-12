@@ -55,13 +55,19 @@ public class BackupBrokerBolt extends BaseRichBolt
     {
         for (Subscription subscription : subscriptions)
         {
+            boolean canEmit = true;
             for (Constraint constraint : subscription.getConstraints())
             {
-                if (constraint.evaluateConstraint(publication))
+                if (!constraint.evaluateConstraint(publication))
                 {
-                    collector.emit(new Values(subscription, publication));
-                    bufferNotification(subscription, publication);
+                    canEmit = false;
+                    break;
                 }
+            }
+            if (canEmit)
+            {
+                collector.emit(new Values(subscription, publication));
+                bufferNotification(subscription, publication);
             }
         }
     }

@@ -8,6 +8,7 @@ import org.apache.storm.topology.base.BaseWindowedBolt;
 import org.apache.storm.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
+import org.sbe.statistics.Statistics;
 
 public class BrokerTopology
 {
@@ -58,5 +59,7 @@ public class BrokerTopology
 
         cluster.killTopology("publish-subscribe-topology");
         cluster.shutdown();
+        
+        System.out.print(Statistics.getDeliveryTime());
     }
 }

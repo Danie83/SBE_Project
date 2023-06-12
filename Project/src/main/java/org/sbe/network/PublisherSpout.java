@@ -1,5 +1,6 @@
 package org.sbe.network;
 
+import com.google.protobuf.Timestamp;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -14,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import org.sbe.statistics.Statistics;
 
 public class PublisherSpout
 extends BaseRichSpout
@@ -34,6 +36,9 @@ extends BaseRichSpout
     public void nextTuple()
     {
         Publication publication = publications.get(index);
+        long startTime = System.currentTimeMillis();
+        Statistics.addStartTimestamp(publication, startTime);
+        
         ProtoClass.Publication.Builder serializedPublication = new ProtoClass.Publication().newBuilder()
                 .setCity(publication.getCity())
                 .setDate(publication.getDate().toString())
@@ -55,6 +60,7 @@ extends BaseRichSpout
         }
 
         byte[] emmitedSerializedPublication = outputStream.toByteArray();
+        
         this.collector.emit(new Values(emmitedSerializedPublication));
         index++;
 

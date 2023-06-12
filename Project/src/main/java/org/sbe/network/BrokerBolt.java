@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.sbe.statistics.Statistics;
 
 public class BrokerBolt
 extends BaseRichBolt
@@ -78,15 +79,23 @@ extends BaseRichBolt
     {
         for (Subscription subscription : subscriptions)
         {
+            boolean canEmit = true;
             for (Constraint constraint : subscription.getConstraints())
             {
-                if (constraint.evaluateConstraint(publication))
+                if (!constraint.evaluateConstraint(publication))
                 {
-                    collector.emit(new Values(subscription, publication));
+                    canEmit = false;
+                    break;
                 }
+            }
+            if (canEmit)
+            {
+                Statistics.updateEndTimestamp(publication, System.currentTimeMillis());
+                collector.emit(new Values(subscription, publication));
             }
         }
     }
+    
     public void declareOutputFields(OutputFieldsDeclarer declarer)
     {
         declarer.declare(new Fields("subscription", "publication"));

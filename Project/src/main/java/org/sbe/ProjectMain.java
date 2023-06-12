@@ -4,6 +4,7 @@ import org.sbe.data.DataManager;
 import org.sbe.network.BrokerTopology;
 
 import java.util.logging.Logger;
+import org.sbe.statistics.Statistics;
 
 public class ProjectMain
 {
@@ -19,6 +20,8 @@ public class ProjectMain
     public static void main(String[] args)
     {
         DataManager dm = DataManager.getInstance();
+        Statistics.initialize();
+        
         BrokerTopology.execute();
     }
 }

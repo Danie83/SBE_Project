@@ -8,9 +8,13 @@ import java.util.Map;
 public class Statistics
 {
     private static Map<Publication, Timestamp> deliveryTime;
-    private boolean initialized = false;
-
-    public void initialize()
+    private static boolean initialized = false;
+    
+    public static Map<Publication, Timestamp> getDeliveryTime(){
+        return deliveryTime;
+    }
+    
+    public static void initialize()
     {
         if (initialized)
         {
@@ -21,12 +25,12 @@ public class Statistics
         initialized = true;
     }
 
-    public void addStartTimestamp(Publication newPublication, long start)
+    public static void addStartTimestamp(Publication newPublication, long start)
     {
         deliveryTime.put(newPublication, new Timestamp(start));
     }
 
-    public void updateEndTimestamp(Publication publication, long end)
+    public static void updateEndTimestamp(Publication publication, long end)
     {
         Timestamp ts = deliveryTime.get(publication);
         if (ts == null)
@@ -38,7 +42,7 @@ public class Statistics
         deliveryTime.put(publication, ts);
     }
 
-    private class Timestamp
+    private static class Timestamp
     {
         private Long start;
         private Long end;
